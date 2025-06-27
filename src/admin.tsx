@@ -8,7 +8,6 @@ type Guest = {
   side: Side;
   name: string;
   paid: boolean;
-  attended: boolean;
   created_at: string;
 };
 
@@ -40,20 +39,6 @@ function AdminPanel() {
   useEffect(() => {
     fetchGuests();
   }, []);
-
-  // 来場トグル
-  const toggleAttended = async (id: number, current: boolean) => {
-    const { error } = await supabase
-      .from("guests")
-      .update({ attended: !current })
-      .eq("id", id);
-    if (error) {
-      console.error(error);
-      alert("来場状態の更新に失敗しました。");
-    } else {
-      fetchGuests();
-    }
-  };
 
   // 料金受取トグル
   const togglePaid = async (id: number, current: boolean) => {
@@ -107,7 +92,7 @@ function AdminPanel() {
             className="card-title fw-bold mb-4 text-center"
             style={{ color: "#0abab5", letterSpacing: "0.08em" }}
           >
-            ゲスト管理パネル
+            管理者画面
           </h1>
 
           {/* フィルタ */}
@@ -145,7 +130,6 @@ function AdminPanel() {
                     <th>No.</th>
                     <th>新郎 / 新婦</th>
                     <th>名前</th>
-                    <th>来場</th>
                     <th>料金受取</th>
                     <th>削除</th>
                   </tr>
@@ -153,7 +137,7 @@ function AdminPanel() {
                 <tbody>
                   {filteredGuests.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="text-muted fst-italic">
+                      <td colSpan={5} className="text-muted fst-italic">
                         該当するゲストがいません
                       </td>
                     </tr>
@@ -163,20 +147,6 @@ function AdminPanel() {
                         <td>{i + 1}</td>
                         <td>{guest.side === "groom" ? "新郎側" : "新婦側"}</td>
                         <td>{guest.name}</td>
-                        <td>
-                          <button
-                            className={`btn btn-sm ${
-                              guest.attended
-                                ? "btn-success"
-                                : "btn-outline-secondary"
-                            }`}
-                            onClick={() =>
-                              toggleAttended(guest.id, guest.attended)
-                            }
-                          >
-                            {guest.attended ? "来場済み" : "未来場"}
-                          </button>
-                        </td>
                         <td>
                           <button
                             className={`btn btn-sm ${
