@@ -147,7 +147,7 @@ function AdminPanel() {
                     <th>名前</th>
                     <th>来場</th>
                     <th>料金受取</th>
-                    <th>操作</th>
+                    <th>削除</th>
                   </tr>
                 </thead>
                 <tbody>
